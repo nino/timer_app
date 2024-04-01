@@ -60,9 +60,7 @@ class MyHomePage extends ConsumerWidget {
         }
     }
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('hello'),
-      ),
+      appBar: null,
       body: Center(
         child: username == null ? const LoginForm() : const Dashboard(),
       ),

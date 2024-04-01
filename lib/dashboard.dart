@@ -20,6 +20,20 @@ class TimeEntryListItem extends StatelessWidget {
   }
 }
 
+class CurrentTimeEntry extends ConsumerWidget {
+  const CurrentTimeEntry({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentEntry = ref.watch(getCurrentTimeEntryProvider);
+    return switch (currentEntry) {
+      AsyncData(:final value) => Text('Current entry: ${value.description}'),
+      AsyncLoading() => const Text("Loading current entry…"),
+      _ => const Text("Failed to load current entry"),
+    };
+  }
+}
+
 class Dashboard extends ConsumerWidget {
   const Dashboard({super.key});
 
@@ -28,6 +42,7 @@ class Dashboard extends ConsumerWidget {
     final timeEntries = ref.watch(getTimeEntriesProvider);
     return Column(
       children: [
+        const CurrentTimeEntry(),
         switch (timeEntries) {
           AsyncData(:final value) => Expanded(
                 child: ListView.builder(
@@ -36,7 +51,8 @@ class Dashboard extends ConsumerWidget {
               itemBuilder: (BuildContext context, int index) =>
                   TimeEntryListItem(timeEntry: value[index]),
             )),
-          _ => Text('error'),
+          AsyncLoading() => const Expanded(child: Text('Loading…')),
+          _ => const Text('error'),
         },
         Padding(
             padding: const EdgeInsets.all(8),
