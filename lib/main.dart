@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:timer_app/auth.dart';
-import 'package:timer_app/me_viewer.dart';
 import './login_form.dart';
+import 'package:timer_app/auth.dart';
+
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-      create: (context) => AuthModel(), child: const MyApp()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -43,41 +41,28 @@ class MyApp extends StatelessWidget {
           bodyLarge: TextStyle(fontSize: 14),
         ),
       ),
-      home: const MyHomePage(title: 'My Toggl app'),
+      home: const MyHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
+class MyHomePage extends ConsumerWidget {
+  const MyHomePage({super.key});
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  final inputController = TextEditingController();
-
-  @override
-  dispose() {
-    inputController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<({String? username, String? password})> creds =
+        ref.watch(authProvider);
+    String? username;
+    switch (creds) {
+      case AsyncData(:final value):
+        {
+          username = value.username;
+        }
+    }
+    return Scaffold(
       appBar: null,
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            LoginForm(),
-            CredentialsViewer(),
-            MeViewer(),
-          ],
-        ),
+        child: username == null ? const LoginForm() : const Text("signed in"),
       ),
     );
   }

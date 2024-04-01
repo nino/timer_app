@@ -1,55 +1,33 @@
-import 'package:flutter/material.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthModel extends ChangeNotifier {
-  String? _username;
-  String? _password;
+part 'auth.g.dart';
 
-  AuthModel() {
-    _loadCredentials();
-  }
-
-  Future<void> _loadCredentials() async {
+@riverpod
+class Auth extends _$Auth {
+  @override
+  Future<({String? username, String? password})> build() async {
     final storage = await SharedPreferences.getInstance();
-    _username = storage.getString('username');
-    _password = storage.getString('password');
-    notifyListeners();
+    return (
+      username: storage.getString('username'),
+      password: storage.getString('password')
+    );
   }
 
-  String? get username {
-    return _username;
-  }
-
-  String? get password {
-    return _password;
-  }
-
-  Future<void> signIn(String username, String password) async {
+  Future<void> setCredentials(String username, String password) async {
+    final storage = await SharedPreferences.getInstance();
     if (username == '') {
-      _username = null;
+      await storage.remove('username');
     } else {
-      _username = username;
+      await storage.setString('username', username);
     }
     if (password == '') {
-      _password = null;
+      await storage.remove('password');
     } else {
-      _password = password;
+      await storage.setString('password', password);
     }
-    final storage = await SharedPreferences.getInstance();
 
-    await storage.setString('username', username);
-    await storage.setString('password', password);
-    notifyListeners();
-  }
-
-  Future<void> signOut() async {
-    _username = null;
-    _password = null;
-
-    final storage = await SharedPreferences.getInstance();
-
-    await storage.remove('username');
-    await storage.remove('password');
-    notifyListeners();
+    ref.invalidateSelf();
+    await future;
   }
 }
