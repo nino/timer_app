@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import './login_form.dart';
+import 'package:timer_app/dashboard.dart';
+import 'package:timer_app/login_form.dart';
 import 'package:timer_app/auth.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
         visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
         scaffoldBackgroundColor: const Color(0xFFEEEEEE),
         useMaterial3: true,
-        fontFamily: 'San Francisco',
+        fontFamily: 'IBM Plex Sans',
         inputDecorationTheme: const InputDecorationTheme(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           isDense: true,
@@ -37,7 +38,6 @@ class MyApp extends StatelessWidget {
           bodyMedium: TextStyle(fontSize: 14),
           labelLarge: TextStyle(fontSize: 14),
           labelMedium: TextStyle(fontSize: 13),
-          displayLarge: TextStyle(fontSize: 8),
           bodyLarge: TextStyle(fontSize: 14),
         ),
       ),
@@ -60,9 +60,11 @@ class MyHomePage extends ConsumerWidget {
         }
     }
     return Scaffold(
-      appBar: null,
+      appBar: AppBar(
+        title: const Text('hello'),
+      ),
       body: Center(
-        child: username == null ? const LoginForm() : const Text("signed in"),
+        child: username == null ? const LoginForm() : const Dashboard(),
       ),
     );
   }

@@ -27,7 +27,9 @@ class Auth extends _$Auth {
       await storage.setString('password', password);
     }
 
-    ref.invalidateSelf();
-    await future;
+    state = AsyncData((
+      username: username == '' ? null : username,
+      password: password == '' ? null : password
+    ));
   }
 }
