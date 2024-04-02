@@ -21,6 +21,12 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFEEEEEE),
         useMaterial3: true,
         fontFamily: 'IBM Plex Sans',
+        outlinedButtonTheme: OutlinedButtonThemeData(
+            style: OutlinedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+        )),
         inputDecorationTheme: const InputDecorationTheme(
           floatingLabelBehavior: FloatingLabelBehavior.always,
           isDense: true,
@@ -61,9 +67,11 @@ class MyHomePage extends ConsumerWidget {
     }
     return Scaffold(
       appBar: null,
-      body: Center(
+      body: ConstrainedBox(
+      constraints: const BoxConstraints(minWidth: 200),
+      child: Center(
         child: username == null ? const LoginForm() : const Dashboard(),
-      ),
+      )),
     );
   }
 }

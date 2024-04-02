@@ -62,7 +62,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       Padding(
           padding: padding,
           child:
-              ElevatedButton(onPressed: signIn, child: const Text('Sign in'))),
+              OutlinedButton(onPressed: signIn, child: const Text('Sign in'))),
     ]));
   }
 }

@@ -16,7 +16,7 @@ class MeViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<AuthModel>(builder: (context, auth, child) {
-      return ElevatedButton(
+      return OutlinedButton(
           onPressed: () {
             getMe(auth);
           },

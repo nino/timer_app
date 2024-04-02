@@ -56,7 +56,7 @@ class Dashboard extends ConsumerWidget {
         },
         Padding(
             padding: const EdgeInsets.all(8),
-            child: ElevatedButton(
+            child: OutlinedButton(
                 onPressed: () =>
                     ref.read(authProvider.notifier).setCredentials('', ''),
                 child: const Text('Sign out')))
