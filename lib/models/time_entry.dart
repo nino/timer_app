@@ -1,4 +1,3 @@
-import 'package:timer_app/utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'time_entry.g.dart';

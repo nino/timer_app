@@ -6,6 +6,20 @@ part of 'toggl.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+String _$meHash() => r'ed75c86e4eeb83f5256f5a0703fc1a0cde27bae4';
+
+/// See also [me].
+@ProviderFor(me)
+final meProvider = AutoDisposeFutureProvider<Map<String, dynamic>>.internal(
+  me,
+  name: r'meProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$meHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef MeRef = AutoDisposeFutureProviderRef<Map<String, dynamic>>;
 String _$getTimeEntriesHash() => r'f44a53a99662b5554205f318ba754506cf809a50';
 
 /// See also [getTimeEntries].
@@ -39,6 +53,20 @@ final getCurrentTimeEntryProvider =
 );
 
 typedef GetCurrentTimeEntryRef = AutoDisposeFutureProviderRef<TimeEntry?>;
+String _$getProjectsHash() => r'2de98579de92d4227a65b1a1973a916a747fb269';
+
+/// See also [getProjects].
+@ProviderFor(getProjects)
+final getProjectsProvider = AutoDisposeFutureProvider<List<Project>>.internal(
+  getProjects,
+  name: r'getProjectsProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$getProjectsHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef GetProjectsRef = AutoDisposeFutureProviderRef<List<Project>>;
 String _$reloadAllHash() => r'5095cb6a95624771e7390972328fa2dfd7c554bc';
 
 /// See also [reloadAll].

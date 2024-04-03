@@ -3,18 +3,37 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:timer_app/auth.dart';
 import 'package:timer_app/models/time_entry.dart';
 import 'package:timer_app/toggl.dart';
+import 'package:timer_app/models/project.dart';
 
-class TimeEntryListItem extends StatelessWidget {
+String? projectName(AsyncValue<List<Project>> projects, int? projectId) {
+  if (projectId == null) {
+    return null;
+  }
+  if (projects.hasValue) {
+    final projs = projects.value!;
+    String? name;
+    for (final proj in projs) {
+      if (proj.id == projectId) {
+        name = proj.name;
+      }
+    }
+    return name;
+  }
+  return null;
+}
+
+class TimeEntryListItem extends ConsumerWidget {
   const TimeEntryListItem({super.key, required this.timeEntry});
   final TimeEntry timeEntry;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final projects = ref.watch(getProjectsProvider);
     return SizedBox(
         height: 50,
         width: 100,
         child: Column(children: [
-          Text(timeEntry.projectName ?? '(no project)'),
+          Text(projectName(projects, timeEntry.projectId) ?? '(no project)'),
           Text(timeEntry.description)
         ]));
   }
