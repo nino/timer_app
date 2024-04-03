@@ -5,19 +5,18 @@ import 'package:timer_app/models/time_entry.dart';
 import 'package:timer_app/toggl.dart';
 import 'package:timer_app/models/project.dart';
 
-String? projectName(AsyncValue<List<Project>> projects, int? projectId) {
+Project? project(AsyncValue<List<Project>> projects, int? projectId) {
   if (projectId == null) {
     return null;
   }
   if (projects.hasValue) {
+    // I bet there's a projs.find() that I could use
     final projs = projects.value!;
-    String? name;
     for (final proj in projs) {
       if (proj.id == projectId) {
-        name = proj.name;
+        return proj;
       }
     }
-    return name;
   }
   return null;
 }
@@ -29,11 +28,16 @@ class TimeEntryListItem extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final projects = ref.watch(getProjectsProvider);
+    final proj = project(projects, timeEntry.projectId);
+    int? color = int.tryParse(proj?.color.replaceFirst('#', '0xFF') ?? '');
+
     return SizedBox(
         height: 50,
         width: 100,
         child: Column(children: [
-          Text(projectName(projects, timeEntry.projectId) ?? '(no project)'),
+          Text(proj?.name ?? '(no project)',
+              textAlign: TextAlign.start,
+              style: color != null ? TextStyle(color: Color(color)) : null),
           Text(timeEntry.description)
         ]));
   }
