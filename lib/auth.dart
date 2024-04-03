@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,5 +33,17 @@ class Auth extends _$Auth {
       username: username == '' ? null : username,
       password: password == '' ? null : password
     ));
+  }
+
+  Future<String?> getAuthHeader() async {
+    return state.when(
+      data: (data) {
+        final authString =
+            base64.encode(utf8.encode('${data.username}:${data.password}'));
+        return 'Basic $authString';
+      },
+      loading: () => null,
+      error: (_, __) => null,
+    );
   }
 }

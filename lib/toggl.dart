@@ -27,13 +27,18 @@ Future<List<TimeEntry>> getTimeEntries(GetTimeEntriesRef ref) async {
 }
 
 @riverpod
-Future<TimeEntry> getCurrentTimeEntry(GetCurrentTimeEntryRef ref) async {
-  final (:username, :password) = await ref.read(authProvider.future);
+Future<TimeEntry?> getCurrentTimeEntry(GetCurrentTimeEntryRef ref) async {
+  final authString = await ref.read(authProvider.notifier).getAuthHeader();
 
-  final authString = base64.encode(utf8.encode('$username:$password'));
   final resp = await http.get(
       Uri.parse('https://api.track.toggl.com/api/v9/me/time_entries/current'),
-      headers: {'Authorization': 'Basic $authString'});
+      headers: {'Authorization': authString!});
   Map<String, dynamic> json = jsonDecode(resp.body);
   return TimeEntry.fromJson(json);
+}
+
+@riverpod
+Future<void> reloadAll(ReloadAllRef ref) async {
+  ref.invalidate(getCurrentTimeEntryProvider);
+  ref.invalidate(getTimeEntriesProvider);
 }

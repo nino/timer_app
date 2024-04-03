@@ -23,12 +23,12 @@ final getTimeEntriesProvider =
 
 typedef GetTimeEntriesRef = AutoDisposeFutureProviderRef<List<TimeEntry>>;
 String _$getCurrentTimeEntryHash() =>
-    r'0c3bd5f5a5a1045277f68545907b93f00e39c45c';
+    r'8c130387d0e12b5f4bf64971f75f1db5f5985a42';
 
 /// See also [getCurrentTimeEntry].
 @ProviderFor(getCurrentTimeEntry)
 final getCurrentTimeEntryProvider =
-    AutoDisposeFutureProvider<TimeEntry>.internal(
+    AutoDisposeFutureProvider<TimeEntry?>.internal(
   getCurrentTimeEntry,
   name: r'getCurrentTimeEntryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -38,6 +38,20 @@ final getCurrentTimeEntryProvider =
   allTransitiveDependencies: null,
 );
 
-typedef GetCurrentTimeEntryRef = AutoDisposeFutureProviderRef<TimeEntry>;
+typedef GetCurrentTimeEntryRef = AutoDisposeFutureProviderRef<TimeEntry?>;
+String _$reloadAllHash() => r'5095cb6a95624771e7390972328fa2dfd7c554bc';
+
+/// See also [reloadAll].
+@ProviderFor(reloadAll)
+final reloadAllProvider = AutoDisposeFutureProvider<void>.internal(
+  reloadAll,
+  name: r'reloadAllProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$reloadAllHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef ReloadAllRef = AutoDisposeFutureProviderRef<void>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:timer_app/dashboard.dart';
 import 'package:timer_app/login_form.dart';
@@ -14,13 +16,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = Platform.isIOS || Platform.isAndroid;
     return MaterialApp(
       title: 'Time tracking app',
       theme: ThemeData(
-        visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+        visualDensity:
+            isMobile ? null : const VisualDensity(horizontal: -4, vertical: -4),
         scaffoldBackgroundColor: const Color(0xFFEEEEEE),
         useMaterial3: true,
-        fontFamily: 'IBM Plex Sans',
+        fontFamily: 'San Francisco',
         outlinedButtonTheme: OutlinedButtonThemeData(
             style: OutlinedButton.styleFrom(
           shape: RoundedRectangleBorder(
@@ -68,10 +72,10 @@ class MyHomePage extends ConsumerWidget {
     return Scaffold(
       appBar: null,
       body: ConstrainedBox(
-      constraints: const BoxConstraints(minWidth: 200),
-      child: Center(
-        child: username == null ? const LoginForm() : const Dashboard(),
-      )),
+          constraints: const BoxConstraints(minWidth: 200),
+          child: SafeArea(
+            child: username == null ? const LoginForm() : const Dashboard(),
+          )),
     );
   }
 }

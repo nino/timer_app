@@ -27,7 +27,9 @@ class CurrentTimeEntry extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentEntry = ref.watch(getCurrentTimeEntryProvider);
     return switch (currentEntry) {
-      AsyncData(:final value) => Text('Current entry: ${value.description}'),
+      AsyncData(value: null) => const Text("No current entry"),
+      AsyncData(:final value) when value != null =>
+        Text('Current entry: ${value.description}'),
       AsyncLoading() => const Text("Loading current entry…"),
       _ => const Text("Failed to load current entry"),
     };
@@ -40,6 +42,8 @@ class Dashboard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final timeEntries = ref.watch(getTimeEntriesProvider);
+    final currentEntry = ref.watch(getCurrentTimeEntryProvider);
+
     return Column(
       children: [
         const CurrentTimeEntry(),
@@ -54,12 +58,24 @@ class Dashboard extends ConsumerWidget {
           AsyncLoading() => const Expanded(child: Text('Loading…')),
           _ => const Text('error'),
         },
-        Padding(
-            padding: const EdgeInsets.all(8),
-            child: OutlinedButton(
-                onPressed: () =>
-                    ref.read(authProvider.notifier).setCredentials('', ''),
-                child: const Text('Sign out')))
+        Row(children: [
+          Padding(
+              padding: const EdgeInsets.all(8),
+              child: OutlinedButton(
+                  onPressed: () => ref.read(reloadAllProvider.future),
+                  child: const Text('Reload'))),
+          Padding(
+              padding: const EdgeInsets.all(8),
+              child: Text((timeEntries.isLoading || currentEntry.isLoading)
+                  ? '⌛'
+                  : '👍')),
+          Padding(
+              padding: const EdgeInsets.all(8),
+              child: OutlinedButton(
+                  onPressed: () =>
+                      ref.read(authProvider.notifier).setCredentials('', ''),
+                  child: const Text('Sign out')))
+        ])
       ],
     );
   }
