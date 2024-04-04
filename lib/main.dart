@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:timer_app/auth.dart';
 import 'package:timer_app/dashboard.dart';
 import 'package:timer_app/login_form.dart';
-import 'package:timer_app/auth.dart';
+import 'package:window_manager/window_manager.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await windowManager.ensureInitialized();
+  await windowManager.setMinimumSize(const Size(300, 200));
   runApp(const ProviderScope(child: MyApp()));
 }
 
@@ -20,13 +23,15 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Time tracking app',
       theme: ThemeData(
+        primaryColor: Colors.blue,
         visualDensity:
             isMobile ? null : const VisualDensity(horizontal: -4, vertical: -4),
-        scaffoldBackgroundColor: const Color(0xFFEEEEEE),
+        scaffoldBackgroundColor: const Color(0xFFF0F0F0),
         useMaterial3: true,
         fontFamily: 'San Francisco',
         outlinedButtonTheme: OutlinedButtonThemeData(
             style: OutlinedButton.styleFrom(
+          foregroundColor: Colors.blue,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
