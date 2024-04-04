@@ -20,7 +20,7 @@ final meProvider = AutoDisposeFutureProvider<Map<String, dynamic>>.internal(
 );
 
 typedef MeRef = AutoDisposeFutureProviderRef<Map<String, dynamic>>;
-String _$getTimeEntriesHash() => r'f44a53a99662b5554205f318ba754506cf809a50';
+String _$getTimeEntriesHash() => r'd028d62e5cb258dfc53c4ec674278195bd089452';
 
 /// See also [getTimeEntries].
 @ProviderFor(getTimeEntries)

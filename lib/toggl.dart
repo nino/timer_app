@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:http/http.dart' as http;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:timer_app/auth.dart';
@@ -33,6 +35,9 @@ Future<List<TimeEntry>> getTimeEntries(GetTimeEntriesRef ref) async {
       Uri.parse('https://api.track.toggl.com/api/v9/me/time_entries'),
       headers: {'Authorization': 'Basic $authString'});
   List<dynamic> json = jsonDecode(resp.body);
+  Timer(const Duration(minutes: 5), () {
+    ref.invalidateSelf();
+  });
   return json.map((raw) {
     return TimeEntry.fromJson(raw);
   }).toList();

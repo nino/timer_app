@@ -40,29 +40,43 @@ class _LoginFormState extends ConsumerState<LoginForm> {
   Widget build(BuildContext context) {
     const padding = EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8);
 
-    return Form(
-        child: Column(children: <Widget>[
-      Padding(
-        padding: padding,
-        child: TextFormField(
-            controller: userNameController,
-            decoration: const InputDecoration(labelText: 'Username')),
-      ),
-      Padding(
-        padding: padding,
-        child: TextFormField(
-            controller: passwordController,
-            obscureText: true,
-            autocorrect: false,
-            enableSuggestions: false,
-            decoration: const InputDecoration(
-              labelText: 'Password',
-            )),
-      ),
-      Padding(
-          padding: padding,
-          child:
-              OutlinedButton(onPressed: signIn, child: const Text('Sign in'))),
-    ]));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 300),
+            child: Form(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                      padding: padding,
+                      child: TextFormField(
+                          controller: userNameController,
+                          decoration:
+                              const InputDecoration(labelText: 'Username'))),
+                  Padding(
+                      padding: padding,
+                      child: TextFormField(
+                          controller: passwordController,
+                          obscureText: true,
+                          autocorrect: false,
+                          enableSuggestions: false,
+                          decoration:
+                              const InputDecoration(labelText: 'Password'))),
+                  Padding(
+                      padding: padding,
+                      child: OutlinedButton(
+                        onPressed: signIn,
+                        child: const Text('Sign in'),
+                      ))
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

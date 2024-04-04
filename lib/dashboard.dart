@@ -21,24 +21,41 @@ Project? project(AsyncValue<List<Project>> projects, int? projectId) {
   return null;
 }
 
+class ProjectLabel extends ConsumerWidget {
+  final int? projectId;
+  const ProjectLabel({super.key, this.projectId});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final projects = ref.watch(getProjectsProvider);
+    final proj = project(projects, projectId);
+    int? color = int.tryParse(proj?.color.replaceFirst('#', '0xFF') ?? '');
+
+    return Text(proj?.name ?? '(no project)',
+        textAlign: TextAlign.start,
+        style: color != null ? TextStyle(color: Color(color)) : null);
+  }
+}
+
 class TimeEntryListItem extends ConsumerWidget {
   const TimeEntryListItem({super.key, required this.timeEntry});
   final TimeEntry timeEntry;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final projects = ref.watch(getProjectsProvider);
-    final proj = project(projects, timeEntry.projectId);
-    int? color = int.tryParse(proj?.color.replaceFirst('#', '0xFF') ?? '');
+    const spacing = 8.0;
 
     return SizedBox(
         height: 50,
-        width: 100,
-        child: Column(children: [
-          Text(proj?.name ?? '(no project)',
-              textAlign: TextAlign.start,
-              style: color != null ? TextStyle(color: Color(color)) : null),
-          Text(timeEntry.description)
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Padding(
+              padding: const EdgeInsets.only(left: spacing, right: spacing),
+              child: ProjectLabel(
+                projectId: timeEntry.projectId,
+              )),
+          Padding(
+              padding: const EdgeInsets.only(left: spacing, right: spacing),
+              child: Text(timeEntry.description))
         ]));
   }
 }
@@ -51,8 +68,10 @@ class CurrentTimeEntry extends ConsumerWidget {
     final currentEntry = ref.watch(getCurrentTimeEntryProvider);
     return switch (currentEntry) {
       AsyncData(value: null) => const Text("No current entry"),
-      AsyncData(:final value) when value != null =>
-        Text('Current entry: ${value.description}'),
+      AsyncData(:final value) when value != null => Column(children: [
+          ProjectLabel(projectId: value.projectId),
+          Text('Current entry: ${value.description}')
+        ]),
       AsyncLoading() => const Text("Loading current entry…"),
       _ => const Text("Failed to load current entry"),
     };
@@ -72,16 +91,19 @@ class Dashboard extends ConsumerWidget {
         const CurrentTimeEntry(),
         switch (timeEntries) {
           AsyncData(:final value) => Expanded(
-                child: ListView.builder(
-              itemCount: value.length,
-              itemExtent: 50,
-              itemBuilder: (BuildContext context, int index) =>
-                  TimeEntryListItem(timeEntry: value[index]),
-            )),
+              child: RefreshIndicator(
+                  onRefresh: () async => ref.read(reloadAllProvider.future),
+                  child: ListView.builder(
+                    itemCount: value.length,
+                    itemExtent: 50,
+                    itemBuilder: (BuildContext context, int index) =>
+                        TimeEntryListItem(timeEntry: value[index]),
+                  )),
+            ),
           AsyncLoading() => const Expanded(child: Text('Loading…')),
           _ => const Text('error'),
         },
-        Row(children: [
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
           Padding(
               padding: const EdgeInsets.all(8),
               child: OutlinedButton(
