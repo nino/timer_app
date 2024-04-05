@@ -7,10 +7,17 @@ import 'package:timer_app/dashboard.dart';
 import 'package:timer_app/login_form.dart';
 import 'package:window_manager/window_manager.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+Future<void> initWindowStuff() async {
+  if (Platform.isIOS || Platform.isAndroid) {
+    return;
+  }
   await windowManager.ensureInitialized();
   await windowManager.setMinimumSize(const Size(300, 200));
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initWindowStuff();
   runApp(const ProviderScope(child: MyApp()));
 }
 
