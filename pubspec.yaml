@@ -37,7 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   stockholm: ^0.0.3
   provider: ^6.1.2
-  shared_preferences: ^2.2.2
+  shared_preferences: ^2.2.3
   http: ^1.2.1
   json_annotation: ^4.8.1
   flutter_riverpod: ^2.5.1
